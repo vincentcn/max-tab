@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>max-tab demo</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../max-tab.html">
+    <link rel="import" href="../max-tab-page.html">
+    <link rel="import" href="../max-tab-container.html">
+
+    <custom-style>
+      <style is="custom-style" include="demo-pages-shared-styles">
+      </style>
+    </custom-style>
+  </head>
+  <body>
+    <div class="vertical-section-container centered">
+      <h3>Basic max-tab demo</h3>
+      <demo-snippet>
+        <template>
+          <max-tab-container>
+            <max-tab slot="tabs" name="one">One</max-tab>
+            <max-tab slot="tabs" name="two">Two</max-tab>
+            <max-tab slot="tabs" name="three">Three</max-tab>
+            <max-tab-page slot="pages" name="one"><div>Tab one content</div></max-tab-page>
+            <max-tab-page slot="pages" name="two"><div>Tab two content</div></max-tab-page>
+            <max-tab-page slot="pages" name="three"><div>Tab three content</div></max-tab-page>
+          </max-tab-container>
+        </template>
+      </demo-snippet>
+    </div>
+  </body>
+</html>

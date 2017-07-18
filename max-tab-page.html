@@ -1,0 +1,66 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
+
+<dom-module id="max-tab-page">
+  <template>
+    <style>
+      :host {
+        display: none;
+      }
+
+      :host([selected]) {
+        display: block;
+        clear: both;
+        padding: 20px;
+      }
+    </style>
+    <div class="max-tab-page" name="{{name}}"><slot></slot></div>
+  </template>
+
+  <script>
+    /**
+     * `max-tab-page`
+     * A tab layout used by neocore UI
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class MaxTabPage extends Polymer.GestureEventListeners(Polymer.Element) {
+      static get is() { return 'max-tab-page'; }
+      static get properties() {
+        return {
+          name: {
+            type: String
+          },
+          selected: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
+          }
+        };
+      }
+
+      select() {
+        // console.log("selected - " + this.name);
+        this.set("selected", true);
+      }
+
+      deselect() {
+        // console.log("deselected - " + this.name);
+        this.set("selected", false);
+      }
+
+      _onSelect(e) {
+        console.log("received select event.", e);
+      }
+
+      ready() {
+        super.ready();
+      }
+
+    }
+
+    window.customElements.define(MaxTabPage.is, MaxTabPage);
+  </script>
+</dom-module>

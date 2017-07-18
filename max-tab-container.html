@@ -1,0 +1,149 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
+
+
+<dom-module id="max-tab-container">
+    <template>
+        <style>
+            :host {
+                display: block
+            }
+        </style>
+        <div id="tabContainer">
+            <slot name="tabs" id="tabs"></slot>
+            <slot name="pages" id="pages"></slot>
+        </div>
+    </template>
+
+    <script>
+        /**
+        * `max-tab-container`
+        * A tab container used by neocore UI
+        *
+        * @customElement
+        * @polymer
+        * @demo demo/index.html
+        */
+        class MaxTabContainer extends Polymer.Element {
+
+            static get is() { return 'max-tab-container'; }
+
+            static get properties() {
+                return {
+                    selected: {
+                        type: String
+                    }
+                };
+            }
+
+            static get observers() {
+                return ['_onSelectedChange(selected)'];
+            }
+
+            constructor() {
+                super();
+            }
+
+            ready() {
+                super.ready();
+                const self = this;
+                Polymer.Gestures.addListener(this, "tap", e => this._handlerTap(e));
+
+                Polymer.RenderStatus.afterNextRender(this, function() {
+
+                });
+            }
+
+            connectedCallback() {
+                super.connectedCallback();
+
+                // if (! this.selected) {
+                //     this._selectFirstTab();
+                // }
+            }
+
+            selectTab(tabName) {
+                this.set("selected", tabName);
+            }
+
+            _selectFirstTab() {
+                const firstTabName = this._getFirstTabName();
+                if (firstTabName) {
+                    this.selectTab(firstTabName);
+                }
+            }
+
+            _getFirstTabName() {
+                const self = this;
+                this.$.tabs.assignedNodes().forEach(
+                    function(slotEle) {
+                        if (self._isTagElement(slotEle)){
+                            return slotEle.name;
+                        }
+                    }
+                )
+
+                return null;
+            }
+
+            _onSelectedChange(selected) {
+                const self = this;
+                this.$.tabs.assignedNodes().forEach(
+                    function(slotEle) {
+                        if (self._isTagElement(slotEle)){
+                            if (self.selected === slotEle.name){
+                                slotEle.select();
+                                // slotEle.dispatchEvent(new CustomEvent("select", {message: "selected"}));
+                            } else {
+                                slotEle.deselect();
+                            }
+                        }
+                    }
+                )
+
+                this.$.pages.assignedNodes().forEach(
+                    function(slotEle) {
+                        if (self._isTagPageElement(slotEle)){
+                            if (self.selected === slotEle.name){
+                                slotEle.select();
+                            } else {
+                                slotEle.deselect();
+                            }
+                        }
+                    }
+                )
+            }
+
+            _handlerTap(e) {
+                const tappedTabName = this._getNameOfTappedTab(e.target);
+                if (tappedTabName) {
+                    this.set("selected", tappedTabName);
+                }
+            }
+
+            _isTagElement(element) {
+                return this._isElementInstanceOfType(element,"max-tab");
+            }
+
+            _isTagPageElement(element) {
+                return this._isElementInstanceOfType(element,"max-tab-page");
+            }
+
+            _isElementInstanceOfType(element, type){
+                return element && element.tagName && type 
+                        && (element.tagName.toLowerCase() === type.toLowerCase());
+            }
+
+            _getNameOfTappedTab(element) {
+                if( this._isTagElement(element)){
+                    return element.name;
+                }
+
+                return null;
+            }
+
+        }
+
+        window.customElements.define(MaxTabContainer.is, MaxTabContainer);
+</script>
+</dom-module>

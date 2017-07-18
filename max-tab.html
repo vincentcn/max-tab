@@ -1,0 +1,80 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
+
+<dom-module id="max-tab">
+  <template>
+    <style>
+      :host .max-tab {
+        float: left;
+        padding: 6px 15px 6px 15px;
+        border-bottom: 1px solid #B6C3CC;
+        color: #000000;
+        font-family: "GE Inspira Sans";
+        font-size: 15px;	
+        line-height: 18px;	
+        text-align: center;
+      }
+
+      :host([selected])  .max-tab {
+        font-weight: bold;
+        padding: 6px 15px 5px 15px;
+        border-bottom: 2px solid #0A9EC1;;
+      }
+    </style>
+    <div class="max-tab" name="{{name}}"><slot></slot></div>
+  </template>
+
+  <script>
+    /**
+     * `max-tab`
+     * A tab layout used by neocore UI
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class MaxTab extends Polymer.GestureEventListeners(Polymer.Element) {
+      static get is() { return 'max-tab'; }
+      static get properties() {
+        return {
+          name: {
+            type: String
+          },
+          selected: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
+          }
+        };
+      }
+
+      select() {
+        // console.log("selected - " + this.name);
+        this.set("selected", true);
+      }
+
+      deselect() {
+        // console.log("deselected - " + this.name);
+        this.set("selected", false);
+        this.addEventListener("select", e => this._onSelect(e));
+      }
+
+      _onSelect(e) {
+        console.log("received select event.", e);
+      }
+
+      ready() {
+        super.ready();
+      }
+
+      // _handleTap (e) {
+      //   console.log("Tappinig tab => ", e);
+      //   this.dispatchEvent(
+      //     new CustomEvent("select", {tabName: this.name, composed: true})
+      //     );
+      // }
+    }
+
+    window.customElements.define(MaxTab.is, MaxTab);
+  </script>
+</dom-module>
